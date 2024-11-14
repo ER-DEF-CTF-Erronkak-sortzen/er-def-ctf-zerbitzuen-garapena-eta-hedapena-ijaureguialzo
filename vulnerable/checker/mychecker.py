@@ -74,7 +74,6 @@ class MyChecker(checkerlib.BaseChecker):
         if not self._check_file_integrity('vulnerable-web-1',
                                           '/var/www/html/index.php',
                                           '5b81e2bd3ef4f7380b65214206a6fa70'):
-            logging.error(f"Error de verificación de archivo: index.php")
             return checkerlib.CheckResult.FAULTY
 
         # # check if /etc/sshd_config from pasapasa_ssh has been changed by comparing its hash with the hash of the original file
@@ -115,7 +114,10 @@ class MyChecker(checkerlib.BaseChecker):
         if stderr.channel.recv_exit_status() != 0:
             return False
         output = stdout.read().decode().strip()
-        return hashlib.md5(output.encode()).hexdigest() == md5sum
+        resultado = hashlib.md5(output.encode()).hexdigest()
+        if md5sum != resultado:
+            logging.error(f"Error de verificación de archivo: {container}:{path} esperado:{md5sum} leido:{resultado}")
+        return resultado == md5sum
 
     # Private Funcs - Return False if error
     def _add_new_flag(self, ssh_session, flag):
