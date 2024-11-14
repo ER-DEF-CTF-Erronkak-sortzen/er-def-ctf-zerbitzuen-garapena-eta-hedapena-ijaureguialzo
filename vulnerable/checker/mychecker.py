@@ -71,7 +71,7 @@ class MyChecker(checkerlib.BaseChecker):
         #     return checkerlib.CheckResult.FAULTY
 
         # check if index.hmtl from pasapasa_web has been changed by comparing its hash with the hash of the original file
-        if not self._check_file_integrity('vulnerable-web-1',
+        if not self._check_file_integrity('vulnerable_web_1',
                                           '/var/www/html/index.php',
                                           '5b81e2bd3ef4f7380b65214206a6fa70'):
             return checkerlib.CheckResult.FAULTY
