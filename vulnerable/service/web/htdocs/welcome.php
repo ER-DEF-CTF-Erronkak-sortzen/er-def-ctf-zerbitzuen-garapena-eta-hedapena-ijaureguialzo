@@ -10,7 +10,7 @@ session_start();
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="d-flex vh-100">
-<div class="m-auto text-center">
+<div class="m-auto text-center row">
     <h1>Bienvenid@!</h1>
     <?php if (isset($_SESSION["logged_in"]) && $flag = @file_get_contents('/tmp/flag.txt')) : ?>
         <div id="flag" class="alert alert-success font-monospace col-10 mx-auto">
