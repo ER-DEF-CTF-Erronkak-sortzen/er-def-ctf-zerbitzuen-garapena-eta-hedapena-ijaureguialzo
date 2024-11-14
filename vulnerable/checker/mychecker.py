@@ -6,7 +6,6 @@ import logging
 import socket
 
 import paramiko
-
 from ctf_gameserver import checkerlib
 
 PORT_WEB = 80
@@ -55,7 +54,12 @@ class MyChecker(checkerlib.BaseChecker):
 
     def check_service(self):
         # comprobar si los puertos están abiertos
-        if not self._check_port_web(self.ip, PORT_WEB) or not self._check_port_web(self.ip, PORT_PHPMYADMIN):
+        if not self._check_port_web(self.ip, PORT_WEB):
+            logging.error(f"Error de conexión al contenedor: web")
+            return checkerlib.CheckResult.DOWN
+
+        if not self._check_port_web(self.ip, PORT_PHPMYADMIN):
+            logging.error(f"Error de conexión al contenedor: phpmyadmin")
             return checkerlib.CheckResult.DOWN
 
         # # check if server is Apache 2.4.50
@@ -68,8 +72,9 @@ class MyChecker(checkerlib.BaseChecker):
 
         # check if index.hmtl from pasapasa_web has been changed by comparing its hash with the hash of the original file
         if not self._check_file_integrity('vulnerable-web-1',
-                                          '/usr/local/apache2/htdocs/index.html',
+                                          '/usr/local/apache2/htdocs/index.php',
                                           '5b81e2bd3ef4f7380b65214206a6fa70'):
+            logging.error(f"Error de verificación de archivo: index.php")
             return checkerlib.CheckResult.FAULTY
 
         # # check if /etc/sshd_config from pasapasa_ssh has been changed by comparing its hash with the hash of the original file
