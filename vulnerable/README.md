@@ -14,10 +14,10 @@ ssh docker is configured attending to the following tips:
  'dev1' user's password will never be changed. Moreover, if a team changes it, it will be losing SLa points. 
  
 -Flags: 
-    Flags will be stored in 'pasapasa_ssh_1' docker's '/tmp/flags.txt' file. 
+    Flags will be stored in 'vulnerable_ssh_1' docker's '/tmp/flags.txt' file. 
 
 # About exploting:
-- The attacker has to inspect the index.html document; the credentialas are stored there as plain text. With those credentials, the attacker can log into pasapasa_ssh docker and take the flags from /tmp/flags.txt.
+- The attacker has to inspect the index.html document; the credentialas are stored there as plain text. With those credentials, the attacker can log into vulnerable_ssh docker and take the flags from /tmp/flags.txt.
 - The defender should change 'dev1' user's password. 
   
   Attack performed by Team1 against Team 4. 
@@ -34,22 +34,22 @@ ssh docker is configured attending to the following tips:
 
   Defense performed by Team4
      'ssh root@10.0.0.104'
-     docker exec -it pasapasa_ssh_1 /bin/bash
+     docker exec -it vulnerable_ssh_1 /bin/bash
      passwd dev1
      
 
 # Checker checks:
 - Ports to reach dockers are open (WEB:9797; SSH 8822)
-- User 'dev1' exists in pasapasa_ssh docker. 
-- /etc/sshd_config file from pasapasa_ssh docker has not been changed. 
-- /usr/local/apache2/htdocs/index.html file's content from pasapasa_web docker has not been changed. 
+- User 'dev1' exists in vulnerable_ssh docker. 
+- /etc/sshd_config file from vulnerable_ssh docker has not been changed. 
+- /usr/local/apache2/htdocs/index.html file's content from vulnerable_web docker has not been changed. 
 
 Checks done: 
-- TEAM 0. Stop the container: 'root@team0-services:~# docker stop pasapasa_web_1' It works OK, service's status becomes DOWN. 
-- TEAM 1. Stop the container: 'root@team0-services:~# docker stop pasapasa_ssh_1' It works OK, service's status becomes DOWN.
+- TEAM 0. Stop the container: 'root@team0-services:~# docker stop vulnerable_web_1' It works OK, service's status becomes DOWN. 
+- TEAM 1. Stop the container: 'root@team0-services:~# docker stop vulnerable_ssh_1' It works OK, service's status becomes DOWN.
 - TEAM 2. 'userdel dev1'. It works OK, service's status becomes faulty. 
-- TEAM 3. Change '/etc/sshd_config' file from 'pasapasa_ssh' docker. It works OK, service's status becomes faulty.
-- TEAM 4. Change '/usr/local/apache2/htdocs/index.html' file from 'pasapasa_web' docker. It works OK, service's status becomes faulty.
+- TEAM 3. Change '/etc/sshd_config' file from 'vulnerable_ssh' docker. It works OK, service's status becomes faulty.
+- TEAM 4. Change '/usr/local/apache2/htdocs/index.html' file from 'vulnerable_web' docker. It works OK, service's status becomes faulty.
 - TEAM 5. 'ssh service stop'. It works OK, service's status becomes faulty. 
 - TEAM 0. apt update apache2
 # License notes
