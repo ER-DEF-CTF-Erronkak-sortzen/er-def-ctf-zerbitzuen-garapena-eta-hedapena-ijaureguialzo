@@ -18,9 +18,23 @@ ansible-playbook -i hosts.ini -u root services-playbook.yml
 ansible-playbook -i hosts.ini -u root checkers-playbook.yml
 ```
 
+```
+ansible-playbook -i hosts.ini -u root clean-playbook.yml
+```
+
 ## Comprobar el estado del checker
 
 ```
 ssh root@10.255.254.200
 systemctl status ctf-checkermaster@vulnerable
+```
+
+## Limpiar la base de datos
+
+```
+delete from scoring_capture;
+delete from scoring_checkerstate;
+delete from scoring_flag;
+delete from scoring_statuscheck;
+delete from scoring_gamecontrol;
 ```
