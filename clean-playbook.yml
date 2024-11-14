@@ -35,6 +35,7 @@
     - name: Execute clean script
       shell: "{{ scripts_destination_folder }}clean_{{ item }}.sh"
       loop: "{{ services_to_install.stdout_lines }}"
+      ignore_errors: yes
 
     - name: Remove scripts folder
       file:
