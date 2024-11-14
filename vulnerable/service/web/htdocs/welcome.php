@@ -13,7 +13,7 @@ session_start();
 <div class="m-auto text-center">
     <h1>Bienvenid@!</h1>
     <?php if (isset($_SESSION["logged_in"]) && $flag = @file_get_contents('/tmp/flag.txt')) : ?>
-        <div class="alert alert-success font-monospace">
+        <div class="alert alert-success font-monospace col-10 mx-auto">
             <?php echo $flag ?>
         </div>
     <?php endif; ?>
