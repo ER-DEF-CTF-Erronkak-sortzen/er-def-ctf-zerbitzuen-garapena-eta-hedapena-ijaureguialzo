@@ -17,3 +17,10 @@ ansible-playbook -i hosts.ini -u root services-playbook.yml
 ```
 ansible-playbook -i hosts.ini -u root checkers-playbook.yml
 ```
+
+## Comprobar el estado del checker
+
+```
+ssh root@10.255.254.200
+systemctl status ctf-checkermaster@vulnerable
+```
