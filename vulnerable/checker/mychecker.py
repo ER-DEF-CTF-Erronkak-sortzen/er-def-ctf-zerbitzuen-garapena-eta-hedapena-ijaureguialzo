@@ -6,6 +6,7 @@ import logging
 import socket
 
 import paramiko
+
 from ctf_gameserver import checkerlib
 
 PORT_WEB = 80
@@ -44,7 +45,7 @@ class MyChecker(checkerlib.BaseChecker):
     @ssh_connect()
     def place_flag(self, tick):
         flag = checkerlib.get_flag(tick)
-        creds = self._add_new_flag(self.client, flag)
+        creds = self._add_new_flag(self.client, 'vulnerable_web_1', flag)
         if not creds:
             return checkerlib.CheckResult.FAULTY
         logging.info('created')
@@ -70,7 +71,7 @@ class MyChecker(checkerlib.BaseChecker):
         # if not self._check_ssh_user('dev1'):
         #     return checkerlib.CheckResult.FAULTY
 
-        # check if index.hmtl from pasapasa_web has been changed by comparing its hash with the hash of the original file
+        # comprobar si se ha modificado la portada del sitio web
         if not self._check_file_integrity('vulnerable_web_1',
                                           '/var/www/html/index.php',
                                           '68b6a6b7622c92c2466d498c90abd3d3'):
@@ -91,7 +92,7 @@ class MyChecker(checkerlib.BaseChecker):
         # if not creds:
         #     logging.error(f"Cannot find creds for tick {tick}")
         #     return checkerlib.CheckResult.FLAG_NOT_FOUND
-        flag_present = self._check_flag_present(flag)
+        flag_present = self._check_flag_present('vulnerable_web_1', flag)
         if not flag_present:
             return checkerlib.CheckResult.FLAG_NOT_FOUND
         return checkerlib.CheckResult.OK
@@ -120,9 +121,9 @@ class MyChecker(checkerlib.BaseChecker):
         return resultado == md5sum
 
     # Private Funcs - Return False if error
-    def _add_new_flag(self, ssh_session, flag):
+    def _add_new_flag(self, ssh_session, container, flag):
         # Execute the file creation command in the container
-        command = f"docker exec pasapasa_ssh_1 sh -c 'echo {flag} >> /tmp/flag.txt'"
+        command = f"docker exec {container} -c 'echo {flag} >> /tmp/flag.txt'"
         stdin, stdout, stderr = ssh_session.exec_command(command)
 
         # Check if the command executed successfully
@@ -133,9 +134,9 @@ class MyChecker(checkerlib.BaseChecker):
         return {'flag': flag}
 
     @ssh_connect()
-    def _check_flag_present(self, flag):
+    def _check_flag_present(self, container, flag):
         ssh_session = self.client
-        command = f"docker exec pasapasa_ssh_1 sh -c 'grep {flag} /tmp/flag.txt'"
+        command = f"docker exec {container} sh -c 'grep {flag} /tmp/flag.txt'"
         stdin, stdout, stderr = ssh_session.exec_command(command)
         if stderr.channel.recv_exit_status() != 0:
             return False
