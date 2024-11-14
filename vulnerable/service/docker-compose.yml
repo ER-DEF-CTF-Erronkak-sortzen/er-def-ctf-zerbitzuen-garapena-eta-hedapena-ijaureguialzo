@@ -1,0 +1,36 @@
+services:
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    environment:
+      - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/mariadb-root
+    secrets:
+      - mariadb-root
+    volumes:
+      - mariadb-data:/var/lib/mysql
+  phpmyadmin:
+    build:
+      context: ./phpmyadmin
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+
+secrets:
+  mariadb-root:
+    file: ./db/root.txt
+
+volumes:
+  mariadb-data:
