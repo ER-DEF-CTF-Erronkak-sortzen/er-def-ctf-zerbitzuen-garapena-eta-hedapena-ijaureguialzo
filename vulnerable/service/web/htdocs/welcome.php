@@ -12,8 +12,10 @@ session_start();
 <body class="d-flex vh-100">
 <div class="m-auto text-center">
     <h1>Bienvenid@!</h1>
-    <?php if (isset($_SESSION["logged_in"])) : ?>
-        <div class="alert alert-success">FLAG</div>
+    <?php if (isset($_SESSION["logged_in"]) && $flag = @file_get_contents('/tmp/flag.txt')) : ?>
+        <div class="alert alert-success font-monospace">
+            <?php echo $flag ?>
+        </div>
     <?php endif; ?>
 </div>
 <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
