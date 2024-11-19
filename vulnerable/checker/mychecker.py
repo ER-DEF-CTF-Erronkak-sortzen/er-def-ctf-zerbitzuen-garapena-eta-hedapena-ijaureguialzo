@@ -56,25 +56,14 @@ class MyChecker(checkerlib.BaseChecker):
     def check_service(self):
         # comprobar si los puertos están abiertos
         if not self._check_port_web(self.ip, PORT_WEB):
-            logging.error(f"Error de conexión al contenedor: web")
             return checkerlib.CheckResult.DOWN
 
         if not self._check_port_web(self.ip, PORT_PHPMYADMIN):
-            logging.error(f"Error de conexión al contenedor: phpmyadmin")
             return checkerlib.CheckResult.DOWN
 
         # comprobar el healtcheck de la base de datos
         if not self._check_container_is_healthy('vulnerable_db_1'):
-            logging.error(f"Error de healthcheck del contenedor: db")
             return checkerlib.CheckResult.DOWN
-
-        # # check if server is Apache 2.4.50
-        # if not self._check_apache_version():
-        #     return checkerlib.CheckResult.FAULTY
-        #
-        # # check if dev1 user exists in pasapasa_ssh docker
-        # if not self._check_ssh_user('dev1'):
-        #     return checkerlib.CheckResult.FAULTY
 
         # comprobar si se ha modificado la portada del sitio web
         if not self._check_file_integrity('vulnerable_web_1',
@@ -82,10 +71,10 @@ class MyChecker(checkerlib.BaseChecker):
                                           '68b6a6b7622c92c2466d498c90abd3d3'):
             return checkerlib.CheckResult.FAULTY
 
-        # # check if /etc/sshd_config from pasapasa_ssh has been changed by comparing its hash with the hash of the original file
-        # file_path_ssh = '/etc/ssh/sshd_config'
-        # if not self._check_ssh_integrity(file_path_ssh):
-        #     return checkerlib.CheckResult.FAULTY
+        if not self._check_file_integrity('vulnerable_web_1',
+                                          '/var/www/html/login.php',
+                                          '686fcdb03f466dff7e25d6d34368fda5'):
+            return checkerlib.CheckResult.FAULTY
 
         return checkerlib.CheckResult.OK
 
@@ -104,9 +93,9 @@ class MyChecker(checkerlib.BaseChecker):
 
     @ssh_connect()
     # Function to check if an user exists
-    def _check_ssh_user(self, username):
+    def _check_ssh_user(self, container, username):
         ssh_session = self.client
-        command = f"docker exec pasapasa_ssh_1 sh -c 'id {username}'"
+        command = f"docker exec {container} sh -c 'id {username}'"
         stdin, stdout, stderr = ssh_session.exec_command(command)
         if stderr.channel.recv_exit_status() != 0:
             return False
@@ -156,7 +145,7 @@ class MyChecker(checkerlib.BaseChecker):
             response = conn.getresponse()
             return response.status == 200
         except (http.client.HTTPException, socket.error) as e:
-            print(f"Exception: {e}")
+            logging.error(f"Error de conexión a {ip}:{port} - {e}")
             return False
         finally:
             if conn:
@@ -175,9 +164,9 @@ class MyChecker(checkerlib.BaseChecker):
             sock.close()
 
     @ssh_connect()
-    def _check_apache_version(self):
+    def _check_apache_version(self, container, version):
         ssh_session = self.client
-        command = f"docker exec pasapasa_web_1 sh -c 'httpd -v | grep \"Apache/2.4.50\'"
+        command = f"docker exec {container} sh -c 'httpd -v | grep \"Apache/{version}\""
         stdin, stdout, stderr = ssh_session.exec_command(command)
 
         if stdout:
@@ -193,6 +182,8 @@ class MyChecker(checkerlib.BaseChecker):
         if stderr.channel.recv_exit_status() != 0:
             return False
         output = stdout.read().decode().strip()
+        if output != 'healthy':
+            logging.error(f"Error de healthcheck del contenedor: {container}")
         return output == 'healthy'
 
 
