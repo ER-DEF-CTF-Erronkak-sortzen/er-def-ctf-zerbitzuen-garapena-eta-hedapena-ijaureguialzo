@@ -13,7 +13,7 @@ Escenario para practicar con SQLi.
 ## Restricciones
 
 - No se puede detener la web, la base de datos ni el phpMyAdmin.
-- No de pueden modificar las páginas `index.php` ni `welcome.php`.
+- No se pueden modificar las páginas `index.php` ni `welcome.php`.
 - Si se puede modificar `login.php`.
 - Si se puede borrar `info.php`.
 - No se puede cambiar la contraseña del usuario de base de datos `vulnerable`.
