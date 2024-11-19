@@ -63,6 +63,11 @@ class MyChecker(checkerlib.BaseChecker):
             logging.error(f"Error de conexión al contenedor: phpmyadmin")
             return checkerlib.CheckResult.DOWN
 
+        # comprobar el healtcheck de la base de datos
+        if not self._check_container_is_healthy('vulnerable_db_1'):
+            logging.error(f"Error de healthcheck del contenedor: db")
+            return checkerlib.CheckResult.DOWN
+
         # # check if server is Apache 2.4.50
         # if not self._check_apache_version():
         #     return checkerlib.CheckResult.FAULTY
@@ -179,6 +184,16 @@ class MyChecker(checkerlib.BaseChecker):
             return True
         else:
             return False
+
+    @ssh_connect()
+    def _check_container_is_healthy(self, container):
+        ssh_session = self.client
+        command = f"docker inspect {container} | jq -r '.[0].State.Health.Status'"
+        stdin, stdout, stderr = ssh_session.exec_command(command)
+        if stderr.channel.recv_exit_status() != 0:
+            return False
+        output = stdout.read().decode().strip()
+        return output == 'healthy'
 
 
 if __name__ == '__main__':

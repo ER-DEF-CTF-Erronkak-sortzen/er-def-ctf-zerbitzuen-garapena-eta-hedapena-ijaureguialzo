@@ -49,3 +49,9 @@
         state: absent
 
   # Add more tasks as needed
+
+    - name: Instalar jq
+      apt:
+        name:
+          - jq
+        state: present
