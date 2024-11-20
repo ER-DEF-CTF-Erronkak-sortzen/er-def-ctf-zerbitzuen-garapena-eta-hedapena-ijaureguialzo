@@ -5,9 +5,10 @@ help: _header
 	@echo Opciones:
 	@echo -----------------------------------------------------
 	@echo services / checkers
-	@echo status-checker
+	@echo status-checker / status-sub
 	@echo exploit
-	@echo ssh-gameserver / ssh-t1 / ssh-t2 / ssh-sub-t1
+	@echo ssh-gameserver / ssh-sub-server
+	@echo ssh-t1 / ssh-sub-t1 / ssh-t2 / ssh-sub-t2
 	@echo clean
 	@echo -----------------------------------------------------
 
@@ -25,6 +26,9 @@ checkers:
 status-checker:
 	@ssh root@10.255.254.200 'systemctl status ctf-checkermaster@vulnerable'
 
+status-sub:
+	@ssh root@10.255.254.210 'systemctl status ctf-sub*'
+
 exploit:
 	@python3 vulnerable/exploit/x1.py
 
@@ -34,10 +38,16 @@ ssh-gameserver:
 ssh-t1:
 	@ssh root@10.0.1.101
 
+ssh-sub-t1:
+	@ssh root@10.0.1.1
+
 ssh-t2:
 	@ssh root@10.0.2.101
 
-ssh-sub:
+ssh-sub-t2:
+	@ssh root@10.0.2.1
+
+ssh-sub-server:
 	@ssh root@10.255.254.210
 
 clean:
