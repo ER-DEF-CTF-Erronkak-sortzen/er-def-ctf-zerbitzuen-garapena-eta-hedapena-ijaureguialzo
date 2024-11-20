@@ -47,17 +47,17 @@
       shell: chmod +x {{ checker_py_folder }}{{ item }}/*
       loop: "{{ services_to_install.stdout_lines }}"
 
-    # #- name: Get all lines of apt_requirements.txt files located in service/checker subfolders
-    #   shell: "cat {{ playbook_dir }}/{{ item }}/checker/apt_requirement.txt"
-    #   register: apt_requirements
-    #   loop: "{{ services_to_install.stdout_lines }}"
-    #   delegate_to: localhost
+    - name: Get all lines of apt_requirements.txt files located in service/checker subfolders
+      shell: "cat {{ playbook_dir }}/{{ item }}/checker/apt_requirement.txt"
+      register: apt_requirements
+      loop: "{{ services_to_install.stdout_lines }}"
+      delegate_to: localhost
 
-    # - name: Install apt requirements in all checker subfolders
-    #   apt:
-    #     name: "{{ item }}"
-    #     state: present
-    #   loop: "{{ apt_requirements.results }}"
+    - name: Install apt requirements in all checker subfolders
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ apt_requirements.results }}"
 
     - name: Enable checker service
       command: "systemctl enable ctf-checkermaster@{{ item }}"
@@ -71,7 +71,7 @@
       become: true
       become_user: postgres
       shell: psql -d ctf_gameserver -c "INSERT INTO scoring_service (name, slug) VALUES ('{{ item }}', '{{ item }}');"
-      loop: "{{ services_to_install.stdout_lines }}" 
-      ignore_errors: yes   
+      loop: "{{ services_to_install.stdout_lines }}"
+      ignore_errors: yes
 
   # Add more tasks as needed
