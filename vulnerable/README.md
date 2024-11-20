@@ -42,10 +42,12 @@ Escenario para practicar con SQLi.
 
 ## Pruebas del checker
 
-- Parar alguno de los servicios web.
-- Parar el servidor de base de datos.
-- Modificar alguno de los ficheros.
-- Cambiar la contraseña del usuario de base de datos `vulnerable`.
+| Prueba                                                          | Resultado |
+|-----------------------------------------------------------------|-----------|
+| Parar alguno de los servicios web                               | down      |
+| Parar el servidor de base de datos                              | down      |
+| Modificar alguno de los ficheros                                | faulty    |
+| Cambiar la contraseña del usuario de base de datos `vulnerable` | faulty    |
 
 ## Posibles escenarios adicionales
 
