@@ -37,7 +37,7 @@ ssh-t1:
 ssh-t2:
 	@ssh root@10.0.2.101
 
-ssh-sub-t1:
+ssh-sub:
 	@ssh root@10.255.254.210
 
 clean:
