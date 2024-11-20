@@ -6,6 +6,7 @@ help: _header
 	@echo -----------------------------------------------------
 	@echo services / checkers
 	@echo status-checker
+	@echo exploit
 	@echo clean
 	@echo -----------------------------------------------------
 
@@ -20,8 +21,11 @@ services:
 checkers:
 	@ansible-playbook -i hosts.ini -u root checkers-playbook.yml
 
-clean:
-	@ansible-playbook -i hosts.ini -u root clean-playbook.yml
-
 status-checker:
 	@ssh root@10.255.254.200 'systemctl status ctf-checkermaster@vulnerable'
+
+exploit:
+	@python3 vulnerable/exploit/x1.py
+
+clean:
+	@ansible-playbook -i hosts.ini -u root clean-playbook.yml
