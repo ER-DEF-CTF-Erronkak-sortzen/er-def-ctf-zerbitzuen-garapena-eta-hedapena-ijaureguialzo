@@ -5,10 +5,14 @@ help: _header
 	@echo Opciones:
 	@echo -----------------------------------------------------
 	@echo services / checkers
+	@echo -----------------------------------------------------
 	@echo status-checker / status-sub
-	@echo exploit
+	@echo -----------------------------------------------------
 	@echo ssh-gameserver / ssh-sub-server
 	@echo ssh-t1 / ssh-sub-t1 / ssh-t2 / ssh-sub-t2
+	@echo -----------------------------------------------------
+	@echo exploit
+	@echo -----------------------------------------------------
 	@echo clean
 	@echo -----------------------------------------------------
 
