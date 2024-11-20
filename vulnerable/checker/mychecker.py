@@ -68,12 +68,12 @@ class MyChecker(checkerlib.BaseChecker):
         # comprobar si se ha modificado la portada del sitio web
         if not self._check_file_integrity('vulnerable_web_1',
                                           '/var/www/html/index.php',
-                                          '68b6a6b7622c92c2466d498c90abd3d3'):
+                                          '5b81e2bd3ef4f7380b65214206a6fa70'):
             return checkerlib.CheckResult.FAULTY
 
         if not self._check_file_integrity('vulnerable_web_1',
-                                          '/var/www/html/login.php',
-                                          '686fcdb03f466dff7e25d6d34368fda5'):
+                                          '/var/www/html/welcome.php',
+                                          '9a154b675799fbc99669ea16e9053d3a'):
             return checkerlib.CheckResult.FAULTY
 
         return checkerlib.CheckResult.OK
@@ -108,8 +108,8 @@ class MyChecker(checkerlib.BaseChecker):
         stdin, stdout, stderr = ssh_session.exec_command(command)
         if stderr.channel.recv_exit_status() != 0:
             return False
-        output = stdout.read().decode().strip()
-        resultado = hashlib.md5(output.encode()).hexdigest()
+        output = stdout.read()
+        resultado = hashlib.md5(output).hexdigest()
         if md5sum != resultado:
             logging.error(f"Error de verificación de archivo: {container}:{path} esperado:{md5sum} leido:{resultado}")
         return resultado == md5sum
