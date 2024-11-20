@@ -69,3 +69,4 @@ Escenario para practicar con SQLi.
 - [php - Docker Official Image](https://hub.docker.com/_/php)
 - [Initializing a fresh instance](https://hub.docker.com/_/mysql)
 - [Use Secrets in Compose](https://docs.docker.com/engine/swarm/secrets/#use-secrets-in-compose)
+- [How To Work with Web Data Using Requests and Beautiful Soup with Python 3](https://www.digitalocean.com/community/tutorials/how-to-work-with-web-data-using-requests-and-beautiful-soup-with-python-3)
