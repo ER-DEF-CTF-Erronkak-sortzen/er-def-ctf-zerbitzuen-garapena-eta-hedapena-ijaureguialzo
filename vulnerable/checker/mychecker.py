@@ -76,6 +76,10 @@ class MyChecker(checkerlib.BaseChecker):
                                           '9a154b675799fbc99669ea16e9053d3a'):
             return checkerlib.CheckResult.FAULTY
 
+        # comprobar si el usuario de bd existe
+        if not self._check_mariadb_user('vulnerable_db_1', 'vulnerable', '12345Abcde'):
+            return checkerlib.CheckResult.FAULTY
+
         return checkerlib.CheckResult.OK
 
     def check_flag(self, tick):
@@ -100,6 +104,19 @@ class MyChecker(checkerlib.BaseChecker):
         if stderr.channel.recv_exit_status() != 0:
             return False
         return True
+
+    @ssh_connect()
+    # Function to check if an user exists
+    def _check_mariadb_user(self, container, username, password, version='MariaDB-ubu2404'):
+        ssh_session = self.client
+        command = f"docker exec {container} mariadb -u {username} -p{password} -e 'SELECT VERSION();' -N"
+        stdin, stdout, stderr = ssh_session.exec_command(command)
+        if stderr.channel.recv_exit_status() != 0:
+            return False
+        output = stdout.read().decode().strip()
+        if version not in output:
+            logging.error(f"Error al comprobar el usuario de bd: {username}")
+        return version in output
 
     @ssh_connect()
     def _check_file_integrity(self, container, path, md5sum):

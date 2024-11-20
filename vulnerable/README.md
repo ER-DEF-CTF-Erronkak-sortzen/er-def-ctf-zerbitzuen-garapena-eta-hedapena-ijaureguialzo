@@ -38,6 +38,14 @@ Escenario para practicar con SQLi.
 - Healtcheck del contenedor de MariaDB correcto.
 - Comprobar la integridad del fichero `ìndex.php`.
 - Comprobar la integridad del fichero `welcome.php`.
+- Contraseña del usuario de base de datos `vulnerable` no modificada.
+
+## Pruebas del checker
+
+- Parar alguno de los servicios web.
+- Parar el servidor de base de datos.
+- Modificar alguno de los ficheros.
+- Cambiar la contraseña del usuario de base de datos `vulnerable`.
 
 ## Posibles escenarios adicionales
 
