@@ -50,7 +50,7 @@
 
   # Add more tasks as needed
 
-    - name: Instalar jq
+    - name: Instalar los paquetes necesarios
       apt:
         name:
           - jq

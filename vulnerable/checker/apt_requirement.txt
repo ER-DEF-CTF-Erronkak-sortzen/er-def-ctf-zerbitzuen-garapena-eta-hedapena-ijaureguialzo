@@ -1,3 +1,0 @@
-python3-paramiko
-python3-requests
-python3-bs4
