@@ -37,10 +37,10 @@ exploit:
 	@python3 vulnerable/exploit/x1.py
 
 exploit-t1:
-	@python3 vulnerable/exploit/x2.py 1 | ssh root@10.0.2.101 'cat > x.flag'
+	@python3 vulnerable/exploit/x2.py 1 | ssh root@10.0.2.1 'cat > x.flag'
 
 exploit-t2:
-	@python3 vulnerable/exploit/x2.py 2 | ssh root@10.0.1.101 'cat > x.flag'
+	@python3 vulnerable/exploit/x2.py 2 | ssh root@10.0.1.1 'cat > x.flag'
 
 ssh-gameserver:
 	@ssh root@10.255.254.200
